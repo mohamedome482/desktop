@@ -1,5 +1,5 @@
 import { IGoLiveSettings, StreamInfoView } from '../../../services/streaming';
-import { TPlatform } from '../../../services/platforms';
+import { TPlatform, getPlatformService } from '../../../services/platforms';
 import { TDisplayDestinations } from 'services/dual-output';
 import { ICustomStreamDestination } from 'services/settings/streaming';
 import { Services } from '../../service-provider';
@@ -223,6 +223,24 @@ export class GoLiveSettingsModule {
     });
     this.save(this.state.settings);
     this.prepopulate();
+  }
+
+  get primaryChat() {
+    const primaryPlatform = Services.UserService.views.platform!;
+    // this is migration-like code for users with old primary platform deselected (i.e me)
+    if (!this.state.enabledPlatforms.includes(primaryPlatform.type)) {
+      // return the first enabled platform that supports chat
+      const chatPlatform = this.state.enabledPlatforms.find(platform => {
+        return getPlatformService(platform).hasCapability('chat');
+      });
+      return chatPlatform;
+    }
+
+    return Services.UserService.views.platform!.type;
+  }
+
+  setPrimaryChat(platform: TPlatform) {
+    Services.UserService.actions.setPrimaryPlatform(platform);
   }
 
   /**
