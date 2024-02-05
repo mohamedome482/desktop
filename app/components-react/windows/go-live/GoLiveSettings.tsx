@@ -82,7 +82,7 @@ export default function GoLiveSettings() {
   const shouldShowSettings = !error && !isLoading && hasDestinations;
   const shouldShowLeftCol = protectedModeEnabled;
   const shouldShowAddDestButton = canAddDestinations;
-  const shouldShowPrimaryChatSwitcher = true;
+  const shouldShowPrimaryChatSwitcher = hasDestinations;
 
   const primaryChatOptions = enabledPlatforms.map(platform => {
     const service = getPlatformService(platform);
@@ -142,7 +142,7 @@ export default function GoLiveSettings() {
                   options={primaryChatOptions}
                   labelRender={renderPrimaryChatOption}
                   optionRender={renderPrimaryChatOption}
-                  defaultValue={primaryChat || primaryChatOptions[0].value}
+                  value={primaryChat}
                   onChange={setPrimaryChat}
                 />
               </Form>
