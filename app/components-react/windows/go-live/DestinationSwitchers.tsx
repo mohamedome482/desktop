@@ -12,6 +12,7 @@ import { assertIsDefined } from '../../../util/properties-type-guards';
 import { useDebounce } from '../../hooks';
 import { useGoLiveSettings } from './useGoLiveSettings';
 import { alertAsync } from '../../modals';
+import { platform } from 'os';
 
 /**
  * Allows enabling/disabling platforms and custom destinations for the stream
@@ -43,6 +44,10 @@ export function DestinationSwitchers() {
     emitSwitch();
   }
 
+  // TODO: find a cleaner way to do this
+  const isPrimary = (platform: TPlatform) =>
+    linkedPlatforms.length === 1 ? true : isPrimaryPlatform(platform);
+
   return (
     <div>
       <div>
@@ -52,7 +57,7 @@ export function DestinationSwitchers() {
             destination={platform}
             enabled={isEnabled(platform)}
             onChange={enabled => togglePlatform(platform, enabled)}
-            isPrimary={isPrimaryPlatform(platform)}
+            isPrimary={isPrimary(platform)}
           />
         ))}
         {customDestinations?.map((dest, ind) => (
@@ -87,6 +92,15 @@ function DestinationSwitcher(p: IDestinationSwitcherProps) {
   const canDisableDestination = canEnableRestream ? true : !p.isPrimary;
 
   function onClickHandler(ev: MouseEvent) {
+    if (!canDisableDestination) {
+      alertAsync(
+        $t(
+          'You cannot disable the platform you used to sign in to Streamlabs Desktop. Please sign in with a different platform to disable streaming to this destination.',
+        ),
+      );
+      return;
+    }
+
     if (canEnableRestream) {
       const enable = !p.enabled;
       p.onChange(enable);
