@@ -60,15 +60,6 @@ class GoLiveSettingsState extends StreamInfoView<IGoLiveSettingsState> {
     this.linkedPlatforms.forEach(platform => {
       this.updatePlatform(platform, { enabled: enabledPlatforms.includes(platform) });
     });
-
-    /*
-     * When there's exactly 1 enabled platform, update the primary platform/chat
-     * so that the when deselecting every platform but one correctly updates the
-     * primary platform without re-opening the Go Live window.
-     */
-    if (enabledPlatforms.length === 1) {
-      this.setPrimaryPlatform(enabledPlatforms[0]);
-    }
   }
 
   /**
@@ -230,6 +221,14 @@ export class GoLiveSettingsModule {
     this.state.linkedPlatforms.forEach(platform => {
       this.state.updatePlatform(platform, { enabled: enabledPlatforms.includes(platform) });
     });
+    /*
+     * If there's exactly one enabled platform, set primaryChat to it,
+     * ensures there's a primary platform if the user has multiple selected and then
+     * deselects all but one
+     */
+    if (this.state.enabledPlatforms.length === 1) {
+      this.setPrimaryChat(this.primaryChat);
+    }
     this.save(this.state.settings);
     this.prepopulate();
   }
@@ -239,10 +238,11 @@ export class GoLiveSettingsModule {
     // this is migration-like code for users with old primary platform deselected (i.e me)
     if (!this.state.enabledPlatforms.includes(primaryPlatform.type)) {
       // return the first enabled platform that supports chat
+      // FIXME: what if there are no enabled platforms that support chat?
       const chatPlatform = this.state.enabledPlatforms.find(platform => {
         return getPlatformService(platform).hasCapability('chat');
       });
-      return chatPlatform;
+      return chatPlatform!;
     }
 
     return Services.UserService.views.platform!.type;
