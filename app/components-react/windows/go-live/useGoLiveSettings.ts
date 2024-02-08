@@ -329,6 +329,10 @@ export class GoLiveSettingsModule {
   get hasMultiplePlatforms() {
     return this.state.enabledPlatforms.length > 1;
   }
+
+  get isRestreamEnabled() {
+    return Services.RestreamService.views.canEnableRestream;
+  }
 }
 
 export function useGoLiveSettings() {
