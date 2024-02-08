@@ -83,7 +83,7 @@ export default function GoLiveSettings() {
   const shouldShowSettings = !error && !isLoading && hasDestinations;
   const shouldShowLeftCol = protectedModeEnabled;
   const shouldShowAddDestButton = canAddDestinations;
-  const shouldShowPrimaryChatSwitcher = hasMultiplePlatforms && !isAdvancedMode;
+  const shouldShowPrimaryChatSwitcher = hasMultiplePlatforms;
 
   const primaryChatOptions = enabledPlatforms.map(platform => {
     const service = getPlatformService(platform);
