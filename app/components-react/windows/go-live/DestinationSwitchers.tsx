@@ -5,7 +5,7 @@ import { $t } from '../../../services/i18n';
 import styles from './DestinationSwitchers.m.less';
 import { ICustomStreamDestination } from '../../../services/settings/streaming';
 import { Services } from '../../service-provider';
-import { ListInput, SwitchInput } from '../../shared/inputs';
+import { SwitchInput } from '../../shared/inputs';
 import PlatformLogo from '../../shared/PlatformLogo';
 import { assertIsDefined } from '../../../util/properties-type-guards';
 import { useDebounce } from '../../hooks';
@@ -23,7 +23,6 @@ export function DestinationSwitchers() {
     switchPlatforms,
     switchCustomDestination,
     isPrimaryPlatform,
-    componentView,
   } = useGoLiveSettings();
   const enabledPlatformsRef = useRef(enabledPlatforms);
   enabledPlatformsRef.current = enabledPlatforms;
