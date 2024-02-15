@@ -15,10 +15,7 @@ import ButtonHighlighted from '../../shared/ButtonHighlighted';
 import UltraIcon from '../../shared/UltraIcon';
 import GoLiveError from './GoLiveError';
 import TwitterInput from './Twitter';
-import { TPlatform, getPlatformService } from 'services/platforms';
-import { ListInput } from 'components-react/shared/inputs';
-import Form from 'components-react/shared/inputs/Form';
-import PlatformLogo from 'components-react/shared/PlatformLogo';
+import PrimaryChatSwitcher from './PrimaryChatSwitcher';
 
 const PlusIcon = PlusOutlined as Function;
 
@@ -83,35 +80,6 @@ export default function GoLiveSettings() {
   const shouldShowAddDestButton = canAddDestinations;
   const shouldShowPrimaryChatSwitcher = hasMultiplePlatforms;
 
-  const primaryChatOptions = enabledPlatforms.map(platform => {
-    const service = getPlatformService(platform);
-    return {
-      label: service.displayName,
-      value: platform,
-    };
-  });
-
-  const renderPrimaryChatOption = (option: { label: string; value: TPlatform }) => {
-    /*
-     * TODO: antd's new version has a new Flex component that should make
-     * spacing (`gap` here) more consistent. Also, less typing.
-     * https://ant.design/components/flex
-     */
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: '8px',
-        }}
-      >
-        <PlatformLogo platform={option.value} size={16} />
-        <div>{option.label}</div>
-      </div>
-    );
-  };
-
   return (
     <Row gutter={16} style={{ height: 'calc(100% + 24px)' }}>
       {/*LEFT COLUMN*/}
@@ -132,20 +100,11 @@ export default function GoLiveSettings() {
             )}
           </Scrollable>
           {shouldShowPrimaryChatSwitcher && (
-            <div>
-              <Divider style={{ marginBottom: '8px' }} />
-              <Form layout="vertical">
-                <ListInput
-                  name="primaryChat"
-                  label={$t('Primary Chat')}
-                  options={primaryChatOptions}
-                  labelRender={renderPrimaryChatOption}
-                  optionRender={renderPrimaryChatOption}
-                  value={primaryChat}
-                  onChange={setPrimaryChat}
-                />
-              </Form>
-            </div>
+            <PrimaryChatSwitcher
+              enabledPlatforms={enabledPlatforms}
+              onSetPrimaryChat={setPrimaryChat}
+              primaryChat={primaryChat}
+            />
           )}
         </Col>
       )}
