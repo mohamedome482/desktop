@@ -86,7 +86,7 @@ function DestinationSwitcher(p: IDestinationSwitcherProps) {
   const cannotDisableDestination = p.isPrimary && !canEnableRestream;
 
   function onClickHandler(ev: MouseEvent) {
-    if (!cannotDisableDestination) {
+    if (cannotDisableDestination) {
       alertAsync(
         $t(
           'You cannot disable the platform you used to sign in to Streamlabs Desktop. Please sign in with a different platform to disable streaming to this destination.',
