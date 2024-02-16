@@ -47,25 +47,23 @@ export function DestinationSwitchers() {
 
   return (
     <div>
-      <div>
-        {linkedPlatforms.map(platform => (
-          <DestinationSwitcher
-            key={platform}
-            destination={platform}
-            enabled={isEnabled(platform)}
-            onChange={enabled => togglePlatform(platform, enabled)}
-            isPrimary={isPrimary(platform)}
-          />
-        ))}
-        {customDestinations?.map((dest, ind) => (
-          <DestinationSwitcher
-            key={ind}
-            destination={dest}
-            enabled={customDestinations[ind].enabled}
-            onChange={enabled => switchCustomDestination(ind, enabled)}
-          />
-        ))}
-      </div>
+      {linkedPlatforms.map(platform => (
+        <DestinationSwitcher
+          key={platform}
+          destination={platform}
+          enabled={isEnabled(platform)}
+          onChange={enabled => togglePlatform(platform, enabled)}
+          isPrimary={isPrimary(platform)}
+        />
+      ))}
+      {customDestinations?.map((dest, ind) => (
+        <DestinationSwitcher
+          key={ind}
+          destination={dest}
+          enabled={customDestinations[ind].enabled}
+          onChange={enabled => switchCustomDestination(ind, enabled)}
+        />
+      ))}
     </div>
   );
 }
